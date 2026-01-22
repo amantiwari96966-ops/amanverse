@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AmanVerse | Shayari & Earn</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+  margin:0;
+  padding:20px;
+  background:#0b0b0b;
+  color:#fff;
+  font-family:Arial;
+  text-align:center;
+}
+h1{color:#f5a623;}
+button{
+  width:100%;
+  padding:14px;
+  margin:8px 0;
+  border:none;
+  border-radius:8px;
+  font-size:16px;
+  cursor:pointer;
+}
+.primary{background:#f5a623;color:#000;}
+.dark{background:#333;color:#fff;}
+.red{background:#ff4d4d;color:#fff;}
+.box{
+  background:#111;
+  padding:15px;
+  border-radius:10px;
+  margin-top:15px;
+}
+.hide{display:none;}
+#shayari{
+  white-space:pre-line;
+  line-height:1.8;
+  margin:20px 0;
+}
+#overlay{
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(6px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+#adBox{
+  background:#222;
+  padding:20px;
+  border-radius:10px;
+}
+</style>
+</head>
+<body>
+
+<div id="overlay">
+  <div id="adBox">📢 Advertisement<br><br>Please wait 5 sec…</div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginView">
+  <h1>AmanVerse</h1>
+  <button class="primary" onclick="login()">Login</button>
+  <button class="dark" onclick="login()">Register</button>
+</div>
+
+<!-- APP -->
+<div id="appView" class="hide">
+  <h1>AmanVerse</h1>
+  <div id="wallet">Coins: 0 | ₹0</div>
+
+  <div id="shayari">Next dabao shuru karne ke liye</div>
+
+  <button id="nextBtn" class="dark">Next Shayari</button>
+  <button class="red" onclick="logout()">Logout</button>
+
+  <div id="limitBox" class="box hide">
+    Aapka free limit poora ho gaya.<br>
+    Premium lein ya kal wapas aayein.
+  </div>
+
+  <div class="box">
+    <h3>Premium Membership 💎</h3>
+    ₹100 / Month<br>
+    ₹999 / Year
+  </div>
+
+  <button class="primary" onclick="withdraw()">Withdraw</button>
+</div>
+
+<script>
+const shayariList = [
+`Tumhara zikr jab hota hai,
+Dil chup ho jaata hai,
+Aankhen jhuk jaati hain,
+Aur hum samajh jaate hain,
+Abhi bhi dard baaki hai.`,
+
+`Hum chup rahe toh tum bhool gaye,
+Hum bole toh tum rooth gaye,
+Galti har baar humari thi,
+Bas isliye hum toot gaye,
+Aur tum jeet gaye.`,
+
+`Mohabbat likhne baithe the,
+Par kalam bhi ro padi,
+Har lafz tera naam poochta raha,
+Aur kahani adhoori reh gayi,
+Jaise tu hi poori thi.`,
+
+`Raat ke andhere ne poocha,
+Tu itna tanha kyun hai,
+Maine hans ke kaha,
+Koi apna chhod gaya hai,
+Aur aadat ho gayi hai.`,
+
+`Humne chaha tumhe shiddat se,
+Tumne chaha sahulat se,
+Farq sirf itna tha,
+Humne dil diya,
+Tumne waqt kaata.`,
+
+`Khamoshi bhi ek jawab hoti hai.`,
+`Waqt ne badal diya sab kuch.`,
+`Mohabbat adhuri hi sahi.`,
+`Dil todna unka shauk tha.`,
+`Hum aaj bhi wahi khade hain.`,
+`Tera intezaar hi meri aadat hai.`,
+`Akele rehna bhi ek hunar hai.`,
+`Har muskurahat khushi nahi hoti.`,
+`Kuch dard lafzon me nahi aate.`,
+`Mohabbat ek khamosh jung hai.`,
+`Tum yaad ho, yaadgar nahi.`,
+`Dil maanta nahi, dimaag jaanta hai.`,
+`Kahani khatam, yaadein zinda.`,
+`Ishq ek saza hai.`,
+`Hum phir bhi tumhe chahte hain.`
+];
+
+let coins = 0;
+let index = -1;
+let paidReads = 0;
+
+const loginView = document.getElementById("loginView");
+const appView = document.getElementById("appView");
+const shayariBox = document.getElementById("shayari");
+const wallet = document.getElementById("wallet");
+const nextBtn = document.getElementById("nextBtn");
+const limitBox = document.getElementById("limitBox");
+const overlay = document.getElementById("overlay");
+
+function login(){
+  loginView.classList.add("hide");
+  appView.classList.remove("hide");
+}
+
+function logout(){
+  location.reload();
+}
+
+nextBtn.onclick = ()=>{
+  if(index >= 0){
+    if(paidReads >= 5){
+      limitBox.classList.remove("hide");
+      return;
+    }
+    coins += 3;
+    paidReads++;
+  }
+
+  index++;
+  shayariBox.innerText = shayariList[index];
+  wallet.innerText = `Coins: ${coins} | ₹${(coins/5).toFixed(1)}`;
+
+  // Ad after every 2 shayari
+  if(paidReads > 0 && paidReads % 2 === 0){
+    overlay.style.display = "flex";
+  }
+
+  nextBtn.disabled = true;
+  nextBtn.innerText = "Please wait 5 sec…";
+
+  setTimeout(()=>{
+    overlay.style.display = "none";
+    nextBtn.disabled = false;
+    nextBtn.innerText = "Next Shayari";
+  },5000);
+};
+
+function withdraw(){
+  if(coins/5 < 150){
+    alert("Minimum withdrawal ₹150");
+  } else {
+    alert("Withdrawal request sent");
+  }
+}
+</script>
+
+</body>
+</html>
